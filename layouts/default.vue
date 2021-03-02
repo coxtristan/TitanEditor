@@ -1,6 +1,5 @@
 <template>
     <v-app dark>
-        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.720.0/aws-sdk.js"></script> -->
         <v-app-bar app fluid dense max-height="4em">
             <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
             <v-app-bar-title class="pa-1 pt-0 pb-0 rounded blue--text">

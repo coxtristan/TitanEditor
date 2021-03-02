@@ -192,7 +192,7 @@
                                     class="ma-auto cursor-grab"
                                     gradient=""
                                     :aspect-ratio="16 / 9"
-                                    @click="SetCanvasBackground(image)"
+                                    
                                 ></v-img>
                                 <p
                                     fluid
@@ -267,44 +267,10 @@
             </v-overlay>
         </v-container>
 
-        <v-container
-            class="ma-auto pa-auto d-flex"
-            style="justify-content: center"
-        >
-            <konva-stage
-                ref="stage"
-                :config="{ width: 1280, height: 720 }"
-                style="border: 1px solid white"
-                @click="canvasClicked"
-            >
-                <konva-layer ref="background">
-                    <konva-image
-                        :config="{
-                            image: background_image,
-                            width: 1280,
-                            height: 720,
-                        }"
-                    ></konva-image>
-
-                    <span v-for="image in canvas_images">
-                        <konva-image
-                            :config="{ image: image, draggable: true }"
-                            @click="clickHandler"
-                            @mouseenter="mouseEnterHandler"
-                            @mouseleave="mouseLeaveHandler"
-                            @dragstart="dragStartHandler"
-                            @dragend="dragEndHandler"
-                            @dragmove="dragMoveHandler"
-                            @transform="transformHandler"
-                            @load="canvasImageLoadedHandler"
-                        ></konva-image>
-                    </span>
-                </konva-layer>
-            </konva-stage>
-        </v-container>
+        <editor :backgroundImage="background_image"/>
 
         <v-container style="width: 25em" class="ma-0 pa-0 grey darken-4">
-            <properties :element="test_element" @change="UserSetProperty" />
+            <!-- <properties :element="test_element" @change="UserSetProperty" /> -->
             <v-container fluid class="ma-0 pa-0">
                 <p class="text-center blue--text ma-0 mt-1">Layers</p>
                 <v-divider></v-divider>
@@ -348,7 +314,11 @@
             <v-btn @click="codePreviewEnabled = !codePreviewEnabled">
                 <v-icon>mdi-alpha-x</v-icon>
             </v-btn>
-            <v-row rows="12" style="background-color: black; overflow: auto" class="image-overlay-browser-body">
+            <v-row
+                rows="12"
+                style="background-color: black; overflow: auto"
+                class="image-overlay-browser-body"
+            >
                 <v-cols cols="12">
                     <pre lang="language-lua">
                         <code>
@@ -359,18 +329,18 @@
                 </v-cols>
             </v-row>
         </v-overlay>
+        
     </v-container>
 </template>
 
 <script>
-import Konva from 'vue-konva'
-import KonvaAPI from 'konva'
-import Vue from 'vue'
-Vue.use(Konva, { prefix: 'konva' })
+
 import Properties from '../components/properties.vue'
-import '../plugins/aws-sdk-2.831.0.min.js'
+import ContextMenu from '../components/contextmenu.vue'
+import TitanEditor from '../components/editor.vue'
 
 // config aws
+import '../plugins/aws-sdk-2.831.0.min.js'
 AWS.config.region = 'us-east-2' // Region
 AWS.config.credentials = new AWS.CognitoIdentityCredentials({
     IdentityPoolId: 'us-east-2:648c55da-43b4-4aea-8bd0-9425c3061c3f',
@@ -383,6 +353,12 @@ const AWS_CLOUDFRONT_BASEURL =
 let s3 = new AWS.S3(AWS.config)
 
 export default {
+    components: {
+        ContextMenu,
+        Properties,
+        TitanEditor,
+    },
+
     data() {
         return {
             image_cache: {},
@@ -391,54 +367,21 @@ export default {
             backgroundimage_overlay: false,
             background_image: new window.Image(),
             search_str: '',
-            stage: {},
+            
             canvas_images: [],
-            transformer: {},
-            selected_element: {},
-            test_element: {
-                x: 0,
-                y: 0,
-                width: 0,
-                height: 0,
-                scaleX: 0,
-                scaleY: 0,
-                name: '',
-                imgsrc: '',
-            },
+            
+            
             layer: undefined,
             codePreviewEnabled: false,
-            generatedCode: ''
+            generatedCode: '',
+            
         }
     },
 
     mounted() {
-        this.stage = this.$refs.stage._konvaNode
-        this.SetCanvasBackground(Object.values(this.background_image_cache)[0])
-        let transformer = new KonvaAPI.Transformer({
-            anchorFill: '#00beff',
-            anchorCornerRadius: 0,
-            anchorSize: 9,
-            rotateAnchorOffset: 20,
-            borderStrokeWidth: 2,
-            borderStroke: '#00aaff',
-        })
-
-        this.layer = this.$refs.background._konvaNode
-        this.layer.add(transformer)
-        console.log(this.layer.getChildren().toArray())
-        this.transformer = transformer
-        this.transformer.children[9].off('mouseenter')
-
-        this.transformer.children[9].on('mouseenter', (evt) => {
-            console.log('mouse entered rotater', this.stage.container().style)
-            this.stage.container().style.cursor =
-                'url("/rotate.svg") 16 16, auto'
-        })
-
-        this.transformer.children[9].on('mouseleave', (evt) => {
-            console.log('mouse entered rotater', this.stage.container().style)
-            this.stage.container().style.cursor = 'auto'
-        })
+        // this.stage = this.$refs.stage._konvaNode
+        // this.SetCanvasBackground(Object.values(this.background_image_cache)[0])
+        this.SetCanvasBackground();
     },
 
     created() {},
@@ -530,67 +473,6 @@ export default {
             }
         },
 
-        clickHandler(evt) {
-            console.log(evt.target.getType())
-            this.selected_element = evt.target
-
-            this.transformer.nodes([evt.target])
-            // evt.target.name('Image')
-            // console.log('selected: ', evt.target)
-            // this.test_element = evt.target.attrs
-            this.test_element.x = evt.target.x()
-            this.test_element.y = evt.target.y()
-            this.test_element.width = evt.target.width()
-            this.test_element.height = evt.target.height()
-            this.test_element.name = evt.target.name()
-            this.test_element.scaleX = evt.target.scaleX()
-            this.test_element.scaleY = evt.target.scaleY()
-            this.test_element.imgsrc = evt.target.attrs.image.currentSrc
-            this.test_element.type = evt.target.getType()
-
-            evt.cancelBubble = true
-        },
-
-        mouseEnterHandler(evt) {
-            this.stage.container().style.cursor = 'move'
-        },
-
-        mouseLeaveHandler(evt) {
-            this.stage.container().style.cursor = 'default'
-        },
-
-        dragStartHandler(evt) {},
-
-        dragMoveHandler(evt) {
-            this.selected_element = evt.target
-            this.test_element.x = evt.target.x()
-            this.test_element.y = evt.target.y()
-            this.test_element.width = evt.target.width()
-            this.test_element.height = evt.target.height()
-            this.test_element.name = evt.target.name()
-            this.test_element.scaleX = evt.target.scaleX()
-            this.test_element.scaleY = evt.target.scaleY()
-        },
-
-        transformHandler(evt) {
-            console.log(evt)
-            this.test_element.x = evt.target.x()
-            this.test_element.y = evt.target.y()
-            this.test_element.width = evt.target.width()
-            this.test_element.height = evt.target.height()
-            this.test_element.name = evt.target.name()
-            this.test_element.scaleX = evt.target.scaleX()
-            this.test_element.scaleY = evt.target.scaleY()
-            this.test_element.rotation = evt.target.getAttr('rotation')
-        },
-
-        dragEndHandler(evt) {},
-
-        canvasClicked(evt) {
-            this.transformer.nodes([])
-            console.log('canvas clicked', evt)
-        },
-
         UserSetProperty(evt) {
             console.log(Object.keys(evt))
             Object.keys(evt).forEach((key) => {
@@ -610,10 +492,6 @@ export default {
             console.log(evt)
         },
 
-        canvasImageLoadedHandler(evt) {
-            console.log(evt)
-        },
-
         async InitializeLUAGenerator(evt) {
             evt.preventDefault()
             let stage = {}
@@ -630,21 +508,31 @@ export default {
                             clientRect: child.getClientRect(),
                             classname: child.getClassName(),
                             zindex: child.zIndex(),
+                            type: child.getClassName(),
                         }
                     }
                 })
             console.log(stage)
-            this.$axios.$post('http://localhost:3001/download/', { stage }).then(response => {
-                console.log(response.generatedCode)
-                this.generatedCode = response.generatedCode;
-                this.codePreviewEnabled = true;
-            })
+            this.$axios
+                .$post('http://localhost:3001/download/', { stage })
+                .then((response) => {
+                    console.log(response.generatedCode)
+                    this.generatedCode = response.generatedCode
+                    this.codePreviewEnabled = true
+                })
         },
     },
 }
 </script>
 
 <style lang="scss" scoped>
+#ctxmenu {
+    display: none;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    background: #555;
+}
 .vertical-toolbar {
     height: 100vh !important;
     width: 15em;
