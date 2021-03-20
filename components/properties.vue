@@ -2,169 +2,25 @@
     <v-container fluid class="">
         <p class="text-center blue--text ma-0 mt-1">Properties</p>
         <v-divider></v-divider>
-        <v-text-field
-            dense
-            outlined
-            placeholder="Element Name"
-            class="px-5 pt-4"
-            label="Name"
-            id="name"
-            :value="element.name"
-            @change="SetElementName"
-        ></v-text-field>
-        <v-row
-            align="center"
-            no-gutters
-            fluid
-            rows="2"
-            style=""
-            class="ma-auto px-2"
-        >
-            <v-col cols="5" class="ma-auto" style="width: 15em">
-                <v-text-field
-                    dense
-                    class="ma-auto"
-                    outlined
-                    placeholder="0"
-                    label="x"
-                    id="x"
-                    type="number"
-                    :value="element.x"
-                    @input.native="FieldInputHandler"
-                ></v-text-field>
-                <v-text-field
-                    dense
-                    class="ma-auto"
-                    outlined
-                    placeholder="0"
-                    label="scaleX"
-                    id="scaleX"
-                    type="number"
-                    step=".1"
-                    :value="element ? element.scaleX : null"
-                    @input.native="FieldInputHandler"
-                ></v-text-field>
-            </v-col>
-            <v-tooltip
-                open-delay="1000"
-                bottom
-                color="black"
-                style="background-color: black"
-            >
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                        icon
-                        class="mx-0 px-0"
-                        width="1em"
-                        height="1em"
-                        @click="linkedScale = !linkedScale"
-                        :class="{ disabled: !linkedScale }"
-                        v-bind="attrs"
-                        v-on="on"
-                    >
-                        <v-icon>mdi-link</v-icon>
-                    </v-btn>
-                </template>
-                <div class="blue--text lighten-2">
-                    Maintain Aspect Ratio:
-                    {{ linkedScale ? 'enabled' : 'disabled' }}
-                </div>
-            </v-tooltip>
-            <v-col cols="5" class="ma-auto" style="width: 15em">
-                <v-text-field
-                    dense
-                    outlined
-                    placeholder="0"
-                    label="y"
-                    id="y"
-                    type="number"
-                    :value="element ? element.y : null"
-                    @input.native="FieldInputHandler"
-                ></v-text-field>
-                <v-text-field
-                    dense
-                    outlined
-                    placeholder="0"
-                    label="scaleY"
-                    id="scaleY"
-                    type="number"
-                    step=".1"
-                    :value="element ? element.scaleY : null"
-                    @input.native="FieldInputHandler"
-                ></v-text-field>
-            </v-col>
-        </v-row>
 
-        <v-row
-            align="center"
-            no-gutters
-            fluid
-            rows="2"
-            style=""
-            class="ma-auto px-2"
-        >
-            <v-col cols="5" class="ma-auto" style="width: 15em">
-                <v-text-field
-                    dense
-                    class="ma-auto"
-                    outlined
-                    placeholder="0"
-                    id="width"
-                    label="width"
-                    :value="element ? element.width : null"
-                    type="number"
-                    @input.native="FieldInputHandler"
-                ></v-text-field>
-            </v-col>
+        <v-container class="my-3">
+            <v-row v-for="field in fields" :key="field.field_name" class="pa-3">
+                <v-text-field dense :label="field.field_name" :value="field.value"></v-text-field>
+            </v-row>
 
-            <v-col cols="5" class="ma-auto" style="width: 15em">
-                <v-text-field
-                    dense
-                    class="ma-auto"
-                    outlined
-                    placeholder="0"
-                    label="height"
-                    id="height"
-                    type="number"
-                    :value="element ? element.height : null"
-                    @input.native="FieldInputHandler"
-                ></v-text-field>
-            </v-col>
-        </v-row>
+            <v-divider></v-divider>
+            <p class="text-center blue--text ma-0 mt-1">SubscribeToModel</p>
+            <v-divider></v-divider>
 
-        <v-row>
-            <v-col>
-                <v-text-field
-                    dense
-                    class="ma-auto"
-                    outlined
-                    placeholder="0"
-                    label="rotation"
-                    id="rotation"
-                    type="number"
-                    :value="element ? element.rotation : null"
-                    @input.native="FieldInputHandler"
-                ></v-text-field>
-            </v-col>
-        </v-row>
-
-        <v-textarea
-            v-if="element.type == 'Text'"
-            flat
-            outlined
-            class="px-5"
-            label="Element text"
-        ></v-textarea>
-        <v-container>
-            <v-img
-                outlined
-                contain
-                :src="element.imgsrc"
-                width="75px"
-                height="75px"
-                class="px-5 ma-auto"
-                label=""
-            ></v-img>
+            <v-row class="pa-3">
+                <v-combobox :items="availableModels.UIVisibilityBit" label="UIVisibilityBit"></v-combobox>
+            </v-row>
+            <v-row class="pa-3">
+                <v-combobox :items="availableModels.CurrentWeapon" label="CurrentWeapon"></v-combobox>
+            </v-row>
+            <v-row class="pa-3">
+                <v-combobox :items="availableModels.hudItems" label="hudItems"></v-combobox>
+            </v-row>
         </v-container>
     </v-container>
 </template>
@@ -172,46 +28,165 @@
 <script>
 export default {
     name: 'Properties',
-
+    props: ["element"],
     data() {
         return {
-            linkedScale: false,
+            availableModels: {
+                CurrentWeapon: [
+                    'aat',
+                    'aatIcon',
+                    'ammoClipPercent',
+                    'ammoInClip',
+                    'ammoInDWClip',
+                    'ammoStock',
+                    'clipMaxAmmo',
+                    'currentShotCharge',
+                    'equippedWeaponReference',
+                    'lockedOnEnemy',
+                    'lockedOnEnemyTeamHacking',
+                    'lockedOnEnemyTeamTargetting',
+                    'lockedOnEnemyTeamTargetting',
+                    'lockedOnEnemyTimeRemaining',
+                    'lockOnWidget',
+                    'updateWeaponSelect',
+                    'usingOffhand',
+                    'viewmodelWeaponName',
+                    'weapon',
+                    'weaponOverEnemy',
+                    'weaponReticle',
+                ],
+
+                hudItems: [
+                    'actionSlot1ammo',
+                    'actionSlot2ammo',
+                    'actionSlot3ammo',
+                    'ammoPickedUp',
+                    'amorOverlay',
+                    'cursorHintIconRatio',
+                    'cursorHintImage',
+                    'cursorHintText',
+                    'cybercomActiveType',
+                    'cybercomRequestedType',
+                    'doublePointsActive',
+                    'dpadLeftAmmo',
+                    'game_end_time',
+                    'perks',
+                    'playerSpawned',
+                    'pulseNoAmmo',
+                    'pulseNoLethal',
+                    'pulseNoTactical',
+                    'shockImageBottom',
+                    'shockImageLeft',
+                    'shockImageRight',
+                    'shockImageTop',
+                    'showCursorHint',
+                    'showDpadDown_HackTool',
+                    'showDpadDown_PES',
+                    'showDpadDown',
+                    'showDpadLeft_Staff',
+                    'showDpadLeft_WaveGun',
+                    'showDpadLeft',
+                    'showDpadLeftAmmo',
+                    'showDpadRight_Chicken',
+                    'showDpadRight_DragonStrike',
+                    'showDpadRight_Drone',
+                    'showDpadRight_Gateworm',
+                    'showDpadRight_Spider',
+                    'showDpadRight',
+                    'showDpadUp',
+                    'stickyImage',
+                    'time.quest_complete_time',
+                    'time.round_complete_num',
+                    'time.round_complete_time',
+                    'voipInfo',
+                ],
+
+                UIVisibilityBit: [
+                    'BIT_ADS_JAVELIN',
+                    'BIT_AMMO_COUNTER_HIDE',
+                    'BIT_BOMB_TIMER_A',
+                    'BIT_BOMB_TIMER_B',
+                    'BIT_BOMB_TIMER',
+                    'BIT_CAMERA_ANIM_HIDING_HUD',
+                    'BIT_COMPASS_VISIBLE',
+                    'BIT_COUNTER_UAV_ACTIVE',
+                    'BIT_DEMO_ALL_GAME_HUD_HIDDEN',
+                    'BIT_DEMO_CAMERA_MODE_MOVIECAM',
+                    'BIT_DEMO_CAMERA_MODE_THIRDPERSON',
+                    'BIT_DEMO_HUD_HIDDEN',
+                    'BIT_DISABLE_INGAME_MENU',
+                    'BIT_DRAW_RETICLE',
+                    'BIT_DRAW_SPECTATOR_MESSAGES',
+                    'BIT_EMP_ACTIVE',
+                    'BIT_ENABLE_POPUPS',
+                    'BIT_EXTRACAM_ACTIVE',
+                    'BIT_EXTRACAM_ON',
+                    'BIT_EXTRACAM_STATIC',
+                    'BIT_FINAL_KILLCAM',
+                    'BIT_G_COMPASS_SHOW_ENEMIES',
+                    'BIT_GAME_ENDED',
+                    'BIT_HIDE_FOR_FULLSCREEN_MENU',
+                    'BIT_HUD_HARDCORE',
+                    'BIT_HUD_OBITUARIES',
+                    'BIT_HUD_SHOWOBJICONS',
+                    'BIT_HUD_VISIBLE',
+                    'BIT_IN_GUIDED_MISSILE',
+                    'BIT_IN_KILLCAM',
+                    'BIT_IN_REMOTE_KILLSTREAK_STATIC',
+                    'BIT_IN_REMOTE_MISSILE',
+                    'BIT_IN_VEHICLE',
+                    'BIT_IS_DEMO_MOVIE_RENDERING',
+                    'BIT_IS_DEMO_PLAYING',
+                    'BIT_IS_FLASH_BANGED',
+                    'BIT_IS_FUEL_WEAPON',
+                    'BIT_IS_PLAYER_IN_AFTERLIFE',
+                    'BIT_IS_PLAYER_ZOMBIE',
+                    'BIT_IS_SCOPED',
+                    'BIT_IS_THIRD_PERSON',
+                    'BIT_MIGRATING_HOST',
+                    'BIT_NEMESIS_KILLCAM',
+                    'BIT_OVERTIME',
+                    'BIT_PLAYER_DEAD',
+                    'BIT_POF_FOLLOW',
+                    'BIT_POF_SPEC_ALLOW_FREELOOK',
+                    'BIT_POPUPS_VISIBLE',
+                    'BIT_RADAR_ALLIES',
+                    'BIT_RADAR_AXIS',
+                    'BIT_RADAR_CLIENT',
+                    'BIT_ROUND_END_KILLCAM',
+                    'BIT_SCOREBOARD_OPEN',
+                    'BIT_SELECTING_LOCATION',
+                    'BIT_SELECTING_LOCATIONAL_KILLSTREAK',
+                    'BIT_SPECTATING_CLIENT',
+                    'BIT_TEAM_ALLIES',
+                    'BIT_TEAM_AXIS',
+                    'BIT_TEAM_FREE',
+                    'BIT_TEAM_SPECTATOR',
+                    'BIT_TOTAL_COVERAGE_ACTIVE',
+                    'BIT_UI_ACTIVE',
+                    'BIT_WEAPON_HUD_VISIBLE',
+                    'UI_CLIENT_AND_MATCH_HIGHEST_VISIBILITY_BIT',
+                    'UI_CLIENT_HIGHEST_VISIBILITY_BIT',
+                    'UI_VISIBILITY_BIT_COUNT',
+                ],
+            },
         }
     },
-
-    props: {
-        element: 0,
+    computed: {
+        fields: function () {
+            
+            if (this.element) {
+                console.log(this.element.getAttrs())
+                
+            }
+        },
     },
 
     methods: {
-        SetElementName(evt) {
-            if (this.element && typeof evt == 'string') {
-                this.element.name = evt
-                this.$emit('change', { name: evt })
-            }
-        },
+        updateElementState(elem)
+        {
 
-        FieldInputHandler(evt) {
-            let elemProp = evt.target.id
-
-            // we expect only numbers
-            let value = Number(evt.target.value)
-            if (this.element) {
-                let payload = {}
-
-                if (this.linkedScale && ['scaleX', 'scaleY'].includes(elemProp)) {
-                    payload['scaleX'] = value
-                    payload['scaleY'] = value
-                    
-                } else {
-                    payload[evt.target.id] = Number(evt.target.value)
-                }
-
-                this.$emit('change', payload)
-            }
-        },
-
-        NoElementSelected() {},
+        }
     },
 }
 </script>

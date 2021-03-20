@@ -51,14 +51,22 @@ export default {
         prop: 'showMenu',
         event: 'change',
     },
-    props: ['showMenu', 'x', 'y', 'menuItems', 'selectedObject', 'actions'],
+    props: ['showMenu', 'x', 'y', 'menuItems', 'selectedObjects', 'actions'],
     computed: {
         classname: function() {
-            if(Object.keys(this.selectedObject).length === 0) 
+            console.log("classname?", this.selectedObjects)
+            if(this.selectedObjects.length === 0) 
             {
                 return '';
             }
-            return this.selectedObject.getClassName();
+            
+            if(this.selectedObjects.length === 1) 
+            {
+                
+                return this.selectedObjects[0].getAttr('name');
+
+            }
+            return 'Group';
         },
         
     }
