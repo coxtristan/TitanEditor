@@ -21,7 +21,6 @@
         <!-- MIDDLE CANVAS VIEW -->
         <editor
             ref="editor"
-            :backgroundImage="background_image"
             @selectionUpdated="propertyview.updateElementState"
         />
         <!-- RIGHT PANEL -->
@@ -94,6 +93,7 @@ export default {
         this.editor = this.$refs.editor
         this.layerview = this.$refs.layerview
         this.propertyview = this.$refs.propertyview
+        this.editor.setBackgroundImage("https://d1i6h0k565wt9n.cloudfront.net/images/backgrounds/bo3_thegiant_3.png");
     },
 
     created() {},
