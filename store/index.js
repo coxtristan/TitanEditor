@@ -5,6 +5,7 @@ export const state = () =>
     stage: function () { } // global konva object
 });
 
+// TODO cleanup, store current user credentials/login state 
 // sync
 export const mutations =
 {

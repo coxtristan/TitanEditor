@@ -40,6 +40,7 @@
 </template>
 
 <script>
+// TODO display currently selected group or objects attrs
 import KonvaAPI from 'konva'
 export default {
     name: 'Properties',

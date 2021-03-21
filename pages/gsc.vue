@@ -21,64 +21,15 @@ import {
 let s3 = S3()
 
 export default {
-    // async asyncData({ $content, params }) {
-    //     const s3_params = {
-    //         Bucket: AWSS3_ACCESS_POINT,
-    //         Delimiter: '/', 
-    //         Prefix: 'gsc/', // REMOVE DELIMITERTO SIMPLIFY THE DAMN CODE!
-    //     }
-
-    //     let initial_query = await s3.listObjectsV2(s3_params).promise()
-
-    //     console.log(initial_query)
-    //     let S3_ResolveObjectsRecursive = async (query, directory) => {
-    //         if (query.CommonPrefixes.length <= 0) {
-    //             return {
-    //                 name: directory,
-    //                 children: query.Contents.map((content) => content.Key),
-    //             }
-    //         } else {
-    //             let all_levels = [];
-    //             query.CommonPrefixes.forEach(async common_prefix => {
-
-    //                 const s3_params = {
-    //                     Bucket: AWSS3_ACCESS_POINT,
-    //                     Delimiter: '/',
-    //                     Prefix: common_prefix.Prefix,
-    //                 }
-    //                 let x = await s3.listObjectsV2(s3_params).promise()
-    //                 let children = await S3_ResolveObjectsRecursive(x, common_prefix.Prefix);
-    //                 console.log("children", children)
-    //                 all_levels.push(children);
-    //             })
-    //             return all_levels;
-    //         }
-    //     }
-    //     let all_code = []
-
-    //     initial_query.CommonPrefixes.forEach(async (common_prefix) => {
-    //         const s3_params = {
-    //             Bucket: AWSS3_ACCESS_POINT,
-    //             Delimiter: '/',
-    //             Prefix: common_prefix.Prefix,
-    //         }
-
-    //         let queryResult = await s3.listObjectsV2(s3_params).promise();
-
-    //         all_code.push(
-    //             await S3_ResolveObjectsRecursive(
-    //                 queryResult,
-    //                 common_prefix.Prefix
-    //             )
-    //         )
-    //     });
-
-    //     all_code = all_code.filter(elem => typeof(elem) == "object")
-    //     // console.log(await S3_ResolveObjectsRecursive(initial_query, "/"))
-    //     console.log("all_code", all_code);
+    async asyncData({ $content, params }) {
+        const s3_params = {
+            Bucket: AWSS3_ACCESS_POINT,
+            Delimiter: '/', 
+            Prefix: 'gsc/', //TODO //FIXME remove delimiter and parse s3 bucket object listing
+        }
         
-    //     return {all_code}
-    // },
+        // let initial_query = await s3.listObjectsV2(s3_params).promise()
+    },
 
     mounted() {},
 

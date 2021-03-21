@@ -69,6 +69,10 @@ export default {
         }
     },
     async fetch() {
+        //TODO remove the prefix and make less queries to the s3 database
+        //TODO add search feature
+        //FIXME fix performance of loading a lot of images
+        //BUG fix last tree node opening on its own
         let s3 = S3();
         console.log('hello')
         var params = {

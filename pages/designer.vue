@@ -70,7 +70,7 @@ export default {
         ContextMenu,
         Properties,
         TitanEditor,
-        Layerview,
+        Layerview, // TODO implement layer view and controls
         Toolkit,
         Imagebrowser,
     },

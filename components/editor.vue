@@ -31,17 +31,14 @@
                         listening: false,
                         name: 'background',
                     }"
-                ></konva-image>
-                <konva-rect
-                    ref="selectionRect"
-                    :config="selection_rect"
-                ></konva-rect>
+                />
+                <konva-rect ref="selectionRect" :config="selection_rect" />
                 <konva-image
                     :config="image"
                     v-for="image in canvas_images"
                     :key="image.id"
                 />
-                <konva-transformer ref="transformer"></konva-transformer>
+                <konva-transformer ref="transformer" />
             </konva-layer>
         </konva-stage>
 
@@ -128,8 +125,8 @@ export default {
 
     mounted() {
         this.transformer = this.$refs.transformer.getNode()
-        this.layer = this.$refs.workerLayer.getNode();
-        this.selectionRect = this.$refs.selectionRect.getNode();
+        this.layer = this.$refs.workerLayer.getNode()
+        this.selectionRect = this.$refs.selectionRect.getNode()
         console.log(this.selectionRect)
     },
 
@@ -138,6 +135,9 @@ export default {
             // var newGroup = new KonvaAPI.Group({ name: 'New Group' })
         },
 
+        //TODO setup konva node image event handlers
+        //TODO add text
+        //FIXME Fix context menu bug (opens when its not supposed to, see console for warning info)
         canvasClicked(evt) {
             // this.transformer.nodes([])
             // this.$refs.selectionRect.getNode().moveToTop()
@@ -199,29 +199,32 @@ export default {
             let children = this.layer.getChildren()
             let selectionRect = this.selectionRect.getClientRect()
             let selected = children.toArray().filter((child) => {
-                if (child.getAttr("name") == "background") return false;
-                var inside = this.isRectInsideSelection(selectionRect, child.getClientRect())
+                if (child.getAttr('name') == 'background') return false
+                var inside = this.isRectInsideSelection(
+                    selectionRect,
+                    child.getClientRect()
+                )
                 var intersects = KonvaAPI.Util.haveIntersection(
                     child.getClientRect(),
                     selectionRect
                 )
-                var isSelectionRect = child == this.$refs.selectionRect.getNode()
+                var isSelectionRect =
+                    child == this.$refs.selectionRect.getNode()
                 var isTransformer = child == this.transformer
-    
+
                 return (
                     (inside || intersects) &&
                     !(isSelectionRect || isTransformer)
                 )
             })
-            
+
             console.log('selected', selected)
             this.selected_elements = selected
             this.transformer.nodes(selected)
 
-            
             this.selection_rect.visible = false
         },
-
+        // TODO add text element support
         addImage(imgSrc) {
             var img = new Image()
             console.log(imgSrc)
@@ -234,13 +237,13 @@ export default {
                 })
             img.src = imgSrc
         },
-
-        setBackgroundImage(imgSrc)
-        {
-            let img = new Image();
-            img.onload = () => this.backgroundImage = img
+        // TODO set a default background image
+        // TODO add more background images
+        setBackgroundImage(imgSrc) {
+            let img = new Image()
+            img.onload = () => (this.backgroundImage = img)
             img.src = imgSrc
-        }
+        },
     },
 }
 </script>
