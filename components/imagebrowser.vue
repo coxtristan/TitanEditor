@@ -7,7 +7,6 @@
     >
         <v-divider class=""></v-divider>
         
-        <!-- <v-divider class="mb-4"></v-divider> -->
         <v-text-field
             solo
             dense
@@ -28,7 +27,7 @@
                     width="45"
                     class="elevation-6 hover-riser"
                     :src="item.url"
-                    @click="$emit('image_clicked', item.url)"
+                    @click="itemClickedHandler(item)"
                 >
                     <template #placeholder
                         ><v-row
@@ -46,6 +45,7 @@
             </template>
             <template #label="{ item, open }">
                 <p
+                    @click="itemClickedHandler(item)"
                     class="ma-auto pa-auto hover-riser"
                     :style="{ fontSize: item.children ? '12pt' : '9pt' }"
                 >
@@ -96,15 +96,16 @@ export default {
                 key.length - leaveLast
             )
         let test = folders.map((folder) => {
-            return {
-                name:
-                    stripOffExtra(folder.Prefix, 1) +
-                    ` (${folder.Contents.length})`,
-                children: folder.Contents.map((content) => ({
+            const name = stripOffExtra(folder.Prefix, 1) + ` (${folder.Contents.length})`;
+
+            var children = folder.Contents.map((content) => ({
                     name: stripOffExtra(content.Key, 0),
                     url: AWS_CLOUDFRONT_BASEURL + content.Key,
                     id: content.ETag,
-                })),
+                })) 
+            children.shift();
+            return {
+                name, children
             }
         })
 
@@ -121,7 +122,12 @@ export default {
         // console.log(images)
     },
 
-    methods: {},
+    methods: {
+        itemClickedHandler(item)
+        {
+            this.$emit("image_clicked", item.url)
+        }
+    },
 }
 </script>
 

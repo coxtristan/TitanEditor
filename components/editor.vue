@@ -10,19 +10,9 @@
             @mousemove="selectionUpdateEvt"
             @mouseup="selectionFinishedEvt"
         >
-            <!-- background layer is only for showing an idea of what it looks like in game -->
-            <konva-layer ref="background" :config="{ name: 'Background' }">
-                <konva-image
-                    :config="{
-                        image: backgroundImage,
-                        width: 1280,
-                        height: 720,
-                    }"
-                ></konva-image>
-            </konva-layer>
-
             <!-- this is the root layer for what goes in the actual hud -->
             <konva-layer
+                ref="workerLayer"
                 :config="{
                     name: '.BaseLayer',
                     x: 0,
@@ -31,10 +21,27 @@
                     height: 720,
                 }"
             >
+                <konva-image
+                    ref="backgroundImage"
+                    :config="{
+                        image: backgroundImage,
+                        width: 1280,
+                        height: 720,
+                        draggable: false,
+                        listening: false,
+                        name: 'background',
+                    }"
+                ></konva-image>
                 <konva-rect
                     ref="selectionRect"
                     :config="selection_rect"
                 ></konva-rect>
+                <konva-image
+                    :config="image"
+                    v-for="image in canvas_images"
+                    :key="image.id"
+                />
+                <konva-transformer ref="transformer"></konva-transformer>
             </konva-layer>
         </konva-stage>
 
@@ -90,7 +97,8 @@ export default {
 
     data() {
         return {
-            canvas_images: {},
+            canvas_images: [],
+
             showContext: false,
             contextX: 0,
             contextY: 0,
@@ -107,52 +115,35 @@ export default {
                 // stroke: 'rgba(0, 119, 255, 1.0)',
             },
             mouse: { x1: 0, x2: 0, y1: 0, y2: 0 },
+            testImage: {
+                x: 0,
+                y: 0,
+
+                width: 100,
+                height: 100,
+                draggable: true,
+            },
         }
     },
 
     mounted() {
-        let transformer = new KonvaAPI.Transformer({
-            anchorFill: '#00beff',
-            anchorCornerRadius: 0,
-            anchorSize: 9,
-            rotateAnchorOffset: 20,
-            borderStrokeWidth: 2,
-            borderStroke: '#00aaff',
-        })
-
-        this.layer = this.$refs.background._konvaNode
-
-        this.layer.add(transformer)
-        this.transformer = transformer
-        this.transformer.children[9].off('mouseenter')
-
-        this.transformer.children[9].on('mouseenter', (evt) => {
-            console.log('mouse entered rotater', this.stage.container().style)
-            this.stage.container().style.cursor =
-                'url("/rotate.svg") 16 16, auto'
-        })
-
-        this.transformer.children[9].on('mouseleave', (evt) => {
-            console.log('mouse entered rotater', this.stage.container().style)
-            this.stage.container().style.cursor = 'auto'
-        })
+        this.transformer = this.$refs.transformer.getNode()
+        this.layer = this.$refs.workerLayer.getNode();
+        this.selectionRect = this.$refs.selectionRect.getNode();
+        console.log(this.selectionRect)
     },
 
     methods: {
-
         createGroup() {
-            var newGroup = new KonvaAPI.Group({ name: 'New Group' })
-            this.getBaseLayer.add(newGroup)
-            this.selected_elements.forEach((elem) => elem.moveTo(newGroup))
+            // var newGroup = new KonvaAPI.Group({ name: 'New Group' })
         },
 
         canvasClicked(evt) {
             // this.transformer.nodes([])
-            this.$refs.selectionRect.getNode().moveToTop()
+            // this.$refs.selectionRect.getNode().moveToTop()
 
             console.log('canvas clicked', evt)
         },
-
 
         showContextMenu(evt) {
             evt.evt.preventDefault()
@@ -193,62 +184,63 @@ export default {
             this.selection_rect.width = Math.abs(this.mouse.x2 - this.mouse.x1)
             this.selection_rect.height = Math.abs(this.mouse.y2 - this.mouse.y1)
         },
-        
+
+        isRectInsideSelection(selectionRect, elementClientRect) {
+            var inside =
+                selectionRect.x <= elementClientRect.x &&
+                selectionRect.y <= elementClientRect.y &&
+                selectionRect.x + selectionRect.width >=
+                    elementClientRect.width + elementClientRect.x &&
+                selectionRect.height + selectionRect.y >=
+                    elementClientRect.height + elementClientRect.y
+        },
+
         selectionFinishedEvt(evt) {
             let children = this.layer.getChildren()
-            let selectionRect = this.$refs.selectionRect
-                .getNode()
-                .getClientRect()
+            let selectionRect = this.selectionRect.getClientRect()
             let selected = children.toArray().filter((child) => {
-                let childRect = child.getClientRect()
-                var inside =
-                    selectionRect.x <= childRect.x &&
-                    selectionRect.y <= childRect.y &&
-                    selectionRect.x + selectionRect.width >=
-                        childRect.width + childRect.x &&
-                    selectionRect.height + selectionRect.y >=
-                        childRect.height + childRect.y
+                if (child.getAttr("name") == "background") return false;
+                var inside = this.isRectInsideSelection(selectionRect, child.getClientRect())
                 var intersects = KonvaAPI.Util.haveIntersection(
                     child.getClientRect(),
                     selectionRect
                 )
-                var isSelectionRect =
-                    child == this.$refs.selectionRect.getNode()
+                var isSelectionRect = child == this.$refs.selectionRect.getNode()
                 var isTransformer = child == this.transformer
-
-                // return inside;
+    
                 return (
                     (inside || intersects) &&
                     !(isSelectionRect || isTransformer)
                 )
             })
-            // selected.pop();
+            
             console.log('selected', selected)
             this.selected_elements = selected
-            this.transformer.nodes(selected);
+            this.transformer.nodes(selected)
+
             
-            // this.stage.draw()
-            // console.log(this.transformer.nodes());
             this.selection_rect.visible = false
         },
 
         addImage(imgSrc) {
             var img = new Image()
-            img.onload = () => {
-                var kImg = new KonvaAPI.Image({
-                    x: 0,
-                    y: 0,
+            console.log(imgSrc)
+            img.onload = () =>
+                this.canvas_images.push({
                     image: img,
                     draggable: true,
-                });
-
-                
-                this.layer.add(kImg)
-                this.layer.draw()
-            }
-
-            img.src = imgSrc;
+                    x: 0,
+                    y: 0,
+                })
+            img.src = imgSrc
         },
+
+        setBackgroundImage(imgSrc)
+        {
+            let img = new Image();
+            img.onload = () => this.backgroundImage = img
+            img.src = imgSrc
+        }
     },
 }
 </script>

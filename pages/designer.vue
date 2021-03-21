@@ -19,11 +19,15 @@
         </v-container>
 
         <!-- MIDDLE CANVAS VIEW -->
-        <editor ref="editor" :backgroundImage="background_image" @selectionUpdated="updatePropertiesPanel" />
+        <editor
+            ref="editor"
+            :backgroundImage="background_image"
+            @selectionUpdated="propertyview.updateElementState"
+        />
         <!-- RIGHT PANEL -->
         <v-container style="width: 25em" class="ma-0 pa-0 grey darken-4">
             <!-- <properties :element="test_element" @change="UserSetProperty" /> -->
-            <properties :element="selectedElement"/>
+            <properties ref="propertyview" />
             <layerview ref="layerview"></layerview>
         </v-container>
 
@@ -77,25 +81,22 @@ export default {
             editor: Object,
             layerview: Object,
             propertyview: Object,
-            selectedElement: null,
+            elemAttrs: null,
             // overlay state
             codePreviewEnabled: false,
             generatedCode: '',
         }
     },
 
-    computed: {
-        
-    },
+    computed: {},
 
     mounted() {
-        this.editor = this.$refs.editor;
-        this.layerview = this.$refs.layerview;
-
+        this.editor = this.$refs.editor
+        this.layerview = this.$refs.layerview
+        this.propertyview = this.$refs.propertyview
     },
 
     created() {},
-
 
     methods: {
         async InitializeLUAGenerator(evt) {
@@ -128,15 +129,12 @@ export default {
                 })
         },
 
-        imageClicked(evt)
-        {
-            this.editor.addImage(evt);
+        imageClicked(evt) {
+            if (evt.includes('background')) this.editor.setBackgroundImage(evt)
+            else this.editor.addImage(evt)
         },
 
-        updatePropertiesPanel(elementState)
-        {
-            console.log(elementState)
-        }
+        updatePropertiesPanel(elementState) {},
     },
 }
 </script>

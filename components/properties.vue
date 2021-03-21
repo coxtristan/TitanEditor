@@ -2,10 +2,15 @@
     <v-container fluid class="">
         <p class="text-center blue--text ma-0 mt-1">Properties</p>
         <v-divider></v-divider>
-
-        <v-container class="my-3">
-            <v-row v-for="field in fields" :key="field.field_name" class="pa-3">
-                <v-text-field dense :label="field.field_name" :value="field.value"></v-text-field>
+        
+            
+        <!-- <v-container class="my-3">
+            <v-row v-for="attr in Object.keys(elementAttrs)" :key="attr" class="pa-3">
+                <v-text-field
+                    dense
+                    :label="attr"
+                    :value="elementAttrs[attr]"
+                ></v-text-field>
             </v-row>
 
             <v-divider></v-divider>
@@ -13,22 +18,32 @@
             <v-divider></v-divider>
 
             <v-row class="pa-3">
-                <v-combobox :items="availableModels.UIVisibilityBit" label="UIVisibilityBit"></v-combobox>
+                <v-combobox
+                    :items="availableModels.UIVisibilityBit"
+                    label="UIVisibilityBit"
+                ></v-combobox>
             </v-row>
             <v-row class="pa-3">
-                <v-combobox :items="availableModels.CurrentWeapon" label="CurrentWeapon"></v-combobox>
+                <v-combobox
+                    :items="availableModels.CurrentWeapon"
+                    label="CurrentWeapon"
+                ></v-combobox>
             </v-row>
             <v-row class="pa-3">
-                <v-combobox :items="availableModels.hudItems" label="hudItems"></v-combobox>
+                <v-combobox
+                    :items="availableModels.hudItems"
+                    label="hudItems"
+                ></v-combobox>
             </v-row>
-        </v-container>
+        </v-container> -->
     </v-container>
 </template>
 
 <script>
+import KonvaAPI from 'konva'
 export default {
     name: 'Properties',
-    props: ["element"],
+    // props: ['attrs'],
     data() {
         return {
             availableModels: {
@@ -170,24 +185,35 @@ export default {
                     'UI_VISIBILITY_BIT_COUNT',
                 ],
             },
+
+            elementAttrs: new KonvaAPI.Rect({
+                x: 0,
+                y: 0,
+                width: 1,
+                height: 1,
+            }).getAttrs(),
+            count: 0
         }
     },
+
     computed: {
-        fields: function () {
-            
-            if (this.element) {
-                console.log(this.element.getAttrs())
-                
-            }
-        },
+        shit: function()
+        {
+            return this.elementAttrs;
+        }
     },
 
     methods: {
-        updateElementState(elem)
-        {
-
-        }
+        updateElementState(elem) {
+            this.elementAttrs = elem;
+        },
     },
+
+    updated() {
+        
+        
+        console.log(++this.count);
+    }
 }
 </script>
 <style>
@@ -196,3 +222,4 @@ export default {
     opacity: 0.5;
 }
 </style>
+
