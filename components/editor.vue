@@ -5,7 +5,7 @@
             :config="{ width: 1280, height: 720 }"
             style="border: 1px solid white"
             @click="canvasClicked"
-            @contextmenu="showContextMenu"
+            @contextmenu="contextmenu.show"
             @mousedown="selectionStartEvt"
             @mousemove="selectionUpdateEvt"
             @mouseup="selectionFinishedEvt"
@@ -43,9 +43,7 @@
         </konva-stage>
 
         <context-menu
-            v-model="showContext"
-            :x="contextX"
-            :y="contextY"
+        ref="contextmenu"
             :actions="[
                 {
                     title: 'Link element to model',
@@ -90,13 +88,11 @@ export default {
         Konva,
     },
 
-    props: ['backgroundImage'],
-
     data() {
         return {
             canvas_images: [],
-
-            showContext: false,
+            backgroundImage: new Image(),
+            contextmenu: {},
             contextX: 0,
             contextY: 0,
             selected_elements: [],
@@ -127,6 +123,7 @@ export default {
         this.transformer = this.$refs.transformer.getNode()
         this.layer = this.$refs.workerLayer.getNode()
         this.selectionRect = this.$refs.selectionRect.getNode()
+        this.contextmenu = this.$refs.contextmenu;
         console.log(this.selectionRect)
     },
 
@@ -237,7 +234,7 @@ export default {
                 })
             img.src = imgSrc
         },
-        // TODO set a default background image
+
         // TODO add more background images
         setBackgroundImage(imgSrc) {
             let img = new Image()
