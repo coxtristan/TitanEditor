@@ -111,7 +111,6 @@ export default {
             testImage: {
                 x: 0,
                 y: 0,
-
                 width: 100,
                 height: 100,
                 draggable: true,
@@ -134,7 +133,6 @@ export default {
 
         //TODO setup konva node image event handlers
         //TODO add text
-        //FIXME Fix context menu bug (opens when its not supposed to, see console for warning info)
         canvasClicked(evt) {
             // this.transformer.nodes([])
             // this.$refs.selectionRect.getNode().moveToTop()

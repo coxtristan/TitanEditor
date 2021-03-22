@@ -6,7 +6,7 @@
         style="overflow: auto; max-height: 75vh; height: 100%"
     >
         <v-divider class=""></v-divider>
-        
+
         <v-text-field
             solo
             dense
@@ -14,7 +14,7 @@
             append-icon="mdi-magnify"
             class="ma-2 px-2"
         ></v-text-field>
-        <v-treeview dense :items="image_urls">
+        <v-treeview hoverable dense :items="image_urls">
             <template #prepend="{ item, open }">
                 <v-icon v-if="item.children">{{
                     open ? 'mdi-folder-open' : 'mdi-folder'
@@ -57,10 +57,13 @@
 </template>
 
 <script>
-import {S3, AWS_CLOUDFRONT_BASEURL, AWSS3_ACCESS_POINT} from '../plugins/aws.config.js';
-import '../plugins/aws-sdk-2.831.0.min.js';
-
-
+import {
+    S3,
+    AWS_CLOUDFRONT_BASEURL,
+    AWSS3_ACCESS_POINT,
+} from '../plugins/aws.config.js'
+import '../plugins/aws-sdk-2.831.0.min.js'
+import {v4 as uuidv4 } from 'uuid';
 
 export default {
     data() {
@@ -69,15 +72,20 @@ export default {
         }
     },
     async fetch() {
+        /* Duplicate Etags can exist in an s3 bucket,
+         because the ETag is a md5 hash of the content, 
+         not a unique generated ID. Do not use ETag as unique ID.
+         src: https://forums.aws.amazon.com/thread.jspa?threadID=22743
+         */
         //TODO remove the prefix and make less queries to the s3 database
-        //TODO add search feature
-        //FIXME fix performance of loading a lot of images
+        //TODO add search feature (https://vuetifyjs.com/en/components/treeview/#search-and-filter)
+        //FIXME fix performance of loading a lot of images (https://vuetifyjs.com/en/api/v-treeview/#props-load-children)
         //BUG fix last tree node opening on its own
-        let s3 = S3();
+        let s3 = S3()
         console.log('hello')
         var params = {
             Bucket: AWSS3_ACCESS_POINT,
-            Prefix: 'images/', 
+            Prefix: 'images/',
             Delimiter: '/',
         }
         let image_cache = {}
@@ -93,23 +101,26 @@ export default {
                 .promise()
         })
 
-        let folders = await Promise.all(subfolders);
+        let folders = await Promise.all(subfolders)
         const stripOffExtra = (key, leaveLast) =>
             key.slice(
                 key.lastIndexOf('/', key.length - 2) + 1,
                 key.length - leaveLast
             )
         let test = folders.map((folder) => {
-            const name = stripOffExtra(folder.Prefix, 1) + ` (${folder.Contents.length})`;
+            const name =
+                stripOffExtra(folder.Prefix, 1) + ` (${folder.Contents.length})`
 
             var children = folder.Contents.map((content) => ({
-                    name: stripOffExtra(content.Key, 0),
-                    url: AWS_CLOUDFRONT_BASEURL + content.Key,
-                    id: content.ETag,
-                })) 
-            children.shift();
+                name: stripOffExtra(content.Key, 0),
+                url: AWS_CLOUDFRONT_BASEURL + content.Key,
+                id: uuidv4(),
+            }))
+            children.shift()
             return {
-                name, children
+                name,
+                children,
+                id: uuidv4(),
             }
         })
 
@@ -127,10 +138,9 @@ export default {
     },
 
     methods: {
-        itemClickedHandler(item)
-        {
-            this.$emit("image_clicked", item.url)
-        }
+        itemClickedHandler(item) {
+            this.$emit('image_clicked', item.url)
+        },
     },
 }
 </script>
