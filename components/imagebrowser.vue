@@ -6,15 +6,16 @@
         style="overflow: auto; max-height: 75vh; height: 100%"
     >
         <v-divider class=""></v-divider>
-
+<!-- //TODO[low] debounce search field and offload search to a web worker thread to not block UI thread -->
         <v-text-field
             solo
             dense
+            v-model="searchText"
             placeholder="Search"
             append-icon="mdi-magnify"
             class="ma-2 px-2"
         ></v-text-field>
-        <v-treeview hoverable dense :items="image_urls">
+        <v-treeview hoverable dense :items="image_urls" :search="searchText">
             <template #prepend="{ item, open }">
                 <v-icon v-if="item.children">{{
                     open ? 'mdi-folder-open' : 'mdi-folder'
@@ -29,7 +30,7 @@
                     :src="item.url"
                     @click="itemClickedHandler(item)"
                 >
-                    <template #placeholder
+                    <!-- <template #placeholder
                         ><v-row
                             class="fill-height ma-0"
                             align="center"
@@ -40,10 +41,10 @@
                                 color="grey lighten-5"
                             ></v-progress-circular>
                         </v-row>
-                    </template>
+                    </template> -->
                 </v-img>
             </template>
-            <template #label="{ item, open }">
+            <template #label="{ item }">
                 <p
                     @click="itemClickedHandler(item)"
                     class="ma-auto pa-auto hover-riser"
@@ -69,6 +70,7 @@ export default {
     data() {
         return {
             image_urls: [],
+            searchText: ""
         }
     },
     async fetch() {
@@ -77,10 +79,8 @@ export default {
          not a unique generated ID. Do not use ETag as unique ID.
          src: https://forums.aws.amazon.com/thread.jspa?threadID=22743
          */
-        //TODO remove the prefix and make less queries to the s3 database
-        //TODO add search feature (https://vuetifyjs.com/en/components/treeview/#search-and-filter)
-        //FIXME fix performance of loading a lot of images (https://vuetifyjs.com/en/api/v-treeview/#props-load-children)
-        //BUG fix last tree node opening on its own
+        
+        
         let s3 = S3()
         console.log('hello')
         var params = {
@@ -141,6 +141,7 @@ export default {
         itemClickedHandler(item) {
             this.$emit('image_clicked', item.url)
         },
+
     },
 }
 </script>

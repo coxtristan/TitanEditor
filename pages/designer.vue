@@ -21,7 +21,7 @@
         <!-- MIDDLE CANVAS VIEW -->
         <editor
             ref="editor"
-            @selectionUpdated="propertyview.updateElementState"
+            @selectionUpdated.passive="propertyview.updateElementState"
         />
         <!-- RIGHT PANEL -->
         <v-container style="width: 25em" class="ma-0 pa-0 grey darken-4">

@@ -9,6 +9,7 @@
             @mousedown="selectionStartEvt"
             @mousemove="selectionUpdateEvt"
             @mouseup="selectionFinishedEvt"
+            @dragmove="draghandler"
         >
             <!-- this is the root layer for what goes in the actual hud -->
             <konva-layer
@@ -131,8 +132,7 @@ export default {
             // var newGroup = new KonvaAPI.Group({ name: 'New Group' })
         },
 
-        //TODO setup konva node image event handlers
-        //TODO add text
+        
         canvasClicked(evt) {
             // this.transformer.nodes([])
             // this.$refs.selectionRect.getNode().moveToTop()
@@ -233,12 +233,18 @@ export default {
             img.src = imgSrc
         },
 
-        // TODO add more background images
+        
         setBackgroundImage(imgSrc) {
             let img = new Image()
             img.onload = () => (this.backgroundImage = img)
             img.src = imgSrc
         },
+
+        async draghandler(evt)
+        {
+            if (evt.target != this.transformer)
+            this.$emit('selectionUpdated', evt.target.getAttrs());
+        }
     },
 }
 </script>

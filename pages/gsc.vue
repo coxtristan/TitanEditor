@@ -25,7 +25,7 @@ export default {
         const s3_params = {
             Bucket: AWSS3_ACCESS_POINT,
 
-            Prefix: 'gsc/scripts/', //TODO //FIXME remove delimiter and parse s3 bucket object listing
+            Prefix: 'gsc/scripts/', 
         }
 
         let initial_query = await s3.listObjectsV2(s3_params).promise()

@@ -3,19 +3,16 @@
         <p class="text-center blue--text ma-0 mt-1">Properties</p>
         <v-divider></v-divider>
         
-            
-        <!-- <v-container class="my-3">
-            <v-row v-for="attr in Object.keys(elementAttrs)" :key="attr" class="pa-3">
-                <v-text-field
-                    dense
-                    :label="attr"
-                    :value="elementAttrs[attr]"
-                ></v-text-field>
-            </v-row>
+        <v-container class="my-3">
+            <v-text-field dense flat outlined label="x" :value="elementAttrs.x"></v-text-field>
+            <v-text-field dense flat outlined label="y" :value="elementAttrs.y"></v-text-field>
+            <v-text-field dense flat outlined label="width" :value="elementAttrs.width"></v-text-field>
+            <v-text-field dense flat outlined label="height" :value="elementAttrs.height"></v-text-field>
 
-            <v-divider></v-divider>
+
+            
             <p class="text-center blue--text ma-0 mt-1">SubscribeToModel</p>
-            <v-divider></v-divider>
+            
 
             <v-row class="pa-3">
                 <v-combobox
@@ -34,8 +31,8 @@
                     :items="availableModels.hudItems"
                     label="hudItems"
                 ></v-combobox>
-            </v-row>
-        </v-container> -->
+            </v-row> 
+        </v-container> 
     </v-container>
 </template>
 
@@ -193,28 +190,23 @@ export default {
                 width: 1,
                 height: 1,
             }).getAttrs(),
-            count: 0
+            count: 0,
         }
     },
 
     computed: {
-        shit: function()
-        {
-            return this.elementAttrs;
-        }
     },
 
     methods: {
+        // TODO performance: debounce update of coordinates in property editor
         updateElementState(elem) {
-            this.elementAttrs = elem;
+            
+            this.elementAttrs = elem
         },
     },
 
     updated() {
-        
-        
-        console.log(++this.count);
-    }
+    },
 }
 </script>
 <style>
