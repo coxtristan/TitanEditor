@@ -8,7 +8,6 @@
             @mousedown="mousedown"
             @mousemove="mousemove"
             @mouseup="mouseup"
-            @dragmove="draghandler"
             @click="click"
         >
             <!-- this is the root layer for what goes in the actual hud -->
@@ -46,7 +45,7 @@
                 />
                 <konva-rect ref="selectionRect" :config="selection_rect" />
 
-                <konva-transformer ref="transformer" />
+                <konva-transformer ref="transformer" @dragmove="dragmove" />
                 <konva-rect :config="fpsBackgroundConfig" />
                 <konva-text ref="fpsCounter" :config="fpsConfig" />
             </konva-layer>
@@ -249,12 +248,10 @@ export default {
             }
         },
 
-        async draghandler(evt) {
-            // any selection  should always be selected by the transformer
-
-            // this.transformer.nodes([evt.target])
-            if (evt.target != this.transformer)
-                this.$emit('selectionUpdated', evt.target.getAttrs())
+        async dragmove(evt) {
+            // console.log(evt)
+            
+            this.$emit('transformupdated', evt.target) // send ref to the transformer to the parent. The parent should be able to figure out everything it wants from the transformer alone
         },
 
         // #endregion

@@ -4,10 +4,11 @@
         <v-divider></v-divider>
         
         <v-container class="my-3">
-            <v-text-field dense flat outlined label="x" :value="elementAttrs.x"></v-text-field>
-            <v-text-field dense flat outlined label="y" :value="elementAttrs.y"></v-text-field>
-            <v-text-field dense flat outlined label="width" :value="elementAttrs.width"></v-text-field>
-            <v-text-field dense flat outlined label="height" :value="elementAttrs.height"></v-text-field>
+            <v-text-field disabled dense flat oulined label="Type" :value="typeSelected"/>
+            <v-text-field dense flat outlined label="x" :value="elementAttrs.x"/>
+            <v-text-field dense flat outlined label="y" :value="elementAttrs.y"/>
+            <v-text-field dense flat outlined label="width" :value="elementAttrs.width"/>
+            <v-text-field dense flat outlined label="height" :value="elementAttrs.height"/>
 
 
             
@@ -191,6 +192,7 @@ export default {
                 width: 1,
                 height: 1,
             }).getAttrs(),
+            typeSelected: '',
             count: 0,
         }
     },
@@ -200,9 +202,18 @@ export default {
 
     methods: {
         // TODO performance: debounce update of coordinates in property editor
-        updateElementState(elem) {
-            
-            this.elementAttrs = elem
+        updateElementState(transformer) {
+            if(transformer.nodes().length>1)
+            {
+                this.typeSelected = "group";
+
+                console.log("moving a group!")
+            } else {
+                this.typeSelected = transformer.nodes()[0].getClassName();
+                console.log('moving a(n)', transformer.nodes()[0].getClassName());
+            }
+            console.log(transformer.getAttrs())
+            this.elementAttrs = transformer.getClientRect();
         },
     },
 
