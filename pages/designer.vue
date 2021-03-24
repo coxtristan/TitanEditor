@@ -4,7 +4,7 @@
         <v-container
             class="float-left grey darken-4 vertical-toolbar d-flex flex-column flex-center ma-0 pa-0"
         >
-            <toolkit></toolkit>
+            <toolkit @add_text="editor.addText"></toolkit>
 
             <imagebrowser @image_clicked="imageClicked"></imagebrowser>
 

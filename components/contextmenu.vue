@@ -58,7 +58,7 @@ export default {
     props: ['selectedObjects', 'actions'],
     computed: {
         classname: function () {
-            console.log('classname?', this.selectedObjects)
+            
             if (this.selectedObjects.length === 0) {
                 return ''
             }

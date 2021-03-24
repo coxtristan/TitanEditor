@@ -64,6 +64,7 @@ export default {
                     'updateWeaponSelect',
                     'usingOffhand',
                     'viewmodelWeaponName',
+                    'weaponName',
                     'weapon',
                     'weaponOverEnemy',
                     'weaponReticle',
