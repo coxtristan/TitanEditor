@@ -26,7 +26,7 @@
                         <v-footer justify-self="end" absolute>
                             <v-caption
                                 class="caption grey--text font-weight-medium"
-                                >LUA Designer</v-caption
+                                >Anomaly - a tool for Black Ops 3 HUD prototyping and design</v-caption
                             >
                         </v-footer>
                     </v-img>

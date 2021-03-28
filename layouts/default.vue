@@ -1,18 +1,20 @@
 <template>
     <v-app dark>
-        <v-app-bar app fluid dense max-height="4em">
+        <v-app-bar app fluid dense flex class="ma-auto pa-auto">
             <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
-            <v-app-bar-title class="pa-1 pt-0 pb-0 rounded blue--text">
-                <!-- <h2 style="font-family: jetbrainsmono-regular">anomaly</h2> -->
-                <h4>anomaly</h4>
-            </v-app-bar-title>
-            <v-container text class="ml-auto">
-                <v-btn color="blue"  dense text to="/" class="">Home</v-btn>
-                <v-btn text dense to="/designer">design</v-btn>
-                <v-btn text dense to="/gsc">gsc explorer</v-btn>
-                <v-btn text dense to="/lua">lua explorer</v-btn>
-                <v-btn text dense to="/signup">signup</v-btn>
-                <v-btn color="green" text dense to="/login">login</v-btn>
+            
+            <v-container fluid text>
+                <v-row justify="end">
+                    
+                <v-btn class="ma-2" color="blue" dense text to="/">home</v-btn>
+                <v-btn class="ma-2" text dense to="/designer">anomaly</v-btn>
+                <v-btn class="ma-2" text dense to="/about">about</v-btn>
+
+                </v-row>
+                <!-- <v-btn text dense to="/gsc">gsc explorer</v-btn> -->
+                <!-- <v-btn text dense to="/lua">lua explorer</v-btn> -->
+                <!-- <v-btn text dense to="/signup">signup</v-btn> -->
+                <!-- <v-btn color="green" text dense to="/login">login</v-btn> -->
             </v-container>
         </v-app-bar>
 
@@ -31,5 +33,9 @@ export default {
     },
 }
 </script>
+
+<style lang="sass" scoped>
+
+</style>
 
 
