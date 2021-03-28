@@ -1,6 +1,6 @@
 <template>
 <v-container >
-    <v-card class="ma-auto pa-auto elevation-5" style="width: 50%">
+    <v-card class="ma-auto pa-auto elevation-5" style="">
         <nuxt-content class="pa-4 " :document="about"/>
     </v-card>
 
