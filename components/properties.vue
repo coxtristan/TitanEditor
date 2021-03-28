@@ -2,18 +2,69 @@
     <v-container fluid class="">
         <p class="text-center blue--text ma-0 mt-1">Properties</p>
         <v-divider></v-divider>
-        
-        <v-container class="my-3">
-            <v-text-field disabled dense flat oulined label="Type" :value="typeSelected"/>
-            <v-text-field dense flat outlined label="x" :value="elementAttrs.x"/>
-            <v-text-field dense flat outlined label="y" :value="elementAttrs.y"/>
-            <v-text-field dense flat outlined label="width" :value="elementAttrs.width"/>
-            <v-text-field dense flat outlined label="height" :value="elementAttrs.height"/>
 
+        <v-container
+            class="my-3"
+            v-if="typeSelected != ''"
+            style="min-height: 250"
+        >
+            <v-text-field
+                @change="valueChanged($event, 'type')"
+                disabled
+                dense
+                flat
+                oulined
+                label="Type"
+                :value="typeSelected"
+            />
+            <v-text-field
+                @change="valueChanged($event, 'x')"
+                type="number"
+                dense
+                flat
+                outlined
+                label="x"
+                :value="elementAttrs.x"
+            />
+            <v-text-field
+                @change="valueChanged($event, 'y')"
+                type="number"
+                dense
+                flat
+                outlined
+                label="y"
+                :value="elementAttrs.y"
+            />
+            <v-text-field
+                @change="valueChanged($event, 'width')"
+                type="number"
+                dense
+                flat
+                outlined
+                label="width"
+                :value="elementAttrs.width"
+            />
+            <v-text-field
+                @change="valueChanged($event, 'height')"
+                type="number"
+                dense
+                flat
+                outlined
+                label="height"
+                :value="elementAttrs.height"
+            />
+            <v-text-field
+                v-if="typeSelected == 'Text'"
+                @change="valueChanged($event, 'text')"
+                
+                dense
+                flat
+                outlined
+                label="text"
+                :value="elementAttrs.text"
+            />
 
-            
             <p class="text-center blue--text ma-0 mt-1">SubscribeToModel</p>
-            
 
             <v-row class="pa-3">
                 <v-combobox
@@ -32,13 +83,12 @@
                     :items="availableModels.hudItems"
                     label="hudItems"
                 ></v-combobox>
-            </v-row> 
-        </v-container> 
+            </v-row>
+        </v-container>
     </v-container>
 </template>
 
 <script>
-// TODO display currently selected group or objects attrs
 import KonvaAPI from 'konva'
 export default {
     name: 'Properties',
@@ -194,31 +244,48 @@ export default {
             }).getAttrs(),
             typeSelected: '',
             count: 0,
+            transformer: {},
         }
     },
 
-    computed: {
-    },
+    computed: {},
 
     methods: {
         // TODO performance: debounce update of coordinates in property editor
+        // impl update events to update the currently selected elements position.
+        // use transformer object to apply changes
         updateElementState(transformer) {
-            if(transformer.nodes().length>1)
-            {
-                this.typeSelected = "group";
+            this.transformer = transformer
+            if (transformer.nodes().length > 1) {
+                this.typeSelected = 'group'
 
-                console.log("moving a group!")
+                console.log('moving a group!')
             } else {
-                this.typeSelected = transformer.nodes()[0].getClassName();
-                console.log('moving a(n)', transformer.nodes()[0].getClassName());
+                this.typeSelected = transformer.nodes()[0].getClassName()
+                console.log(
+                    'moving a(n)',
+                    transformer.nodes()[0].getClassName()
+                )
             }
             console.log(transformer.getAttrs())
-            this.elementAttrs = transformer.getClientRect();
+            this.elementAttrs = transformer.getClientRect()
+        },
+
+        valueChanged(evt, field) {
+            console.log('val changed ', evt)
+            if (this.typeSelected == 'Text')
+            {
+                this.transformer.nodes()[0].setAttr(field, evt)
+
+            }
+            else{
+                this.transformer.nodes()[0].setAttr(field, parseInt(evt))
+
+            }
         },
     },
 
-    updated() {
-    },
+    updated() {},
 }
 </script>
 <style>

@@ -1,8 +1,8 @@
 <template>
-    <v-container fluid class="ma-0 pa-0">
+    <v-container fluid class="ma-0 pa-0" style="max-height: 50vh">
         <p class="text-center blue--text ma-0 mt-1">Layers</p>
         <v-divider></v-divider>
-        <v-container style="overflow: auto; max-height: 25em">
+        <v-container style="overflow: auto; max-height: 50vh">
             <v-treeview dense :items="layerTree">
                 <template #prepend="{ item, open: isOpen }">
                     <v-container
@@ -35,17 +35,18 @@ export default {
     name: 'layerview',
     data() {
         return {
+            layerTree: [],
         }
     },
 
-    computed: {
-        
-        layerTree: function () {
-            let tree = []
+    methods: {
+        // parses the Konva layer object
+        update(layer) {
+            this.layerTree = layer.getChildren().map(child => { return {name: child.getClassName(), children: []} });
+        }   
+    }
 
-            return tree
-        },
-    },
+    
 }
 </script>
 

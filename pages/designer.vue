@@ -22,10 +22,10 @@
         <editor
             ref="editor"
             @transformupdated="propertyview.updateElementState"
+            @layerupdated="layerview.update"
         />
         <!-- RIGHT PANEL -->
-        <v-container style="width: 25em" class="ma-0 pa-0 grey darken-4">
-            <!-- <properties :element="test_element" @change="UserSetProperty" /> -->
+        <v-container style="width: 25em; max-height: 100vh" class="ma-0 pa-0 grey darken-4">
             <properties ref="propertyview" />
             <layerview ref="layerview"></layerview>
         </v-container>

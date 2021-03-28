@@ -287,18 +287,21 @@ export default {
         // #endregion
 
         // #region exposed methods
-        // TODO add text element support
+        
         addImage(imgSrc) {
             var img = new Image()
             console.log(imgSrc)
-            img.onload = () =>
+            img.onload = () => {
                 this.canvasImages.push({
                     image: img,
                     draggable: true,
                     x: 0,
                     y: 0,
                 })
+                this.$emit("layerupdated", this.layer);
+            }
             img.src = imgSrc
+            
         },
 
         addText(text) {
@@ -310,6 +313,7 @@ export default {
                 fontSize: 22,
                 draggable: true,
             })
+            this.$emit("layerupdated", this.layer);
         },
 
         setBackgroundImage(imgSrc) {
