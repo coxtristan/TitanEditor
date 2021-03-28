@@ -6,15 +6,15 @@ export default {
 
     // Global page headers (https://go.nuxtjs.dev/config-head)
     head: {
-        titleTemplate: '%s - designer-frontend',
-        title: 'designer-frontend',
+        titleTemplate: '%s - LunarAnomaly',
+        title: 'anomaly',
         meta: [
             { charset: 'utf-8' },
             { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-            { hid: 'description', name: 'description', content: '' }
+            { hid: 'description', name: 'description', content: 'My portfolio and a collection of software and information related to games' }
         ],
         link: [
-            { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+            { rel: 'icon', type: 'image/x-icon', href: '/lunaranomaly.png' }
         ]
     },
 

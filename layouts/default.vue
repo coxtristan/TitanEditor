@@ -3,7 +3,8 @@
         <v-app-bar app fluid dense max-height="4em">
             <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
             <v-app-bar-title class="pa-1 pt-0 pb-0 rounded blue--text">
-                <h2>Titan</h2>
+                <!-- <h2 style="font-family: jetbrainsmono-regular">anomaly</h2> -->
+                <h4>anomaly</h4>
             </v-app-bar-title>
             <v-container text class="ml-auto">
                 <v-btn color="blue"  dense text to="/" class="">Home</v-btn>
