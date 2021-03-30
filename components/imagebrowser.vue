@@ -125,7 +125,7 @@ export default {
         })
 
         console.log(test)
-        this.image_urls = test
+        this.image_urls = Object.freeze(test);
         // images.CommonPrefixes.forEach(async prefix => {
         //     let images = await s3.listObjectsV2(params).promise()
         // })
