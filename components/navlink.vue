@@ -1,11 +1,11 @@
 <template>
-
+    <NuxtLink :href="to" @click="">{{title}}</NuxtLink>
 </template>
 
 <script>
 export default {
-    name: 'Navbar',
-
+    name: 'Navlink',
+    props: ['to', 'title', 'active']
 }
 
 </script>

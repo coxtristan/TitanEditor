@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid class="ma-0 pa-0 d-flex">
+    <v-container class="ma-0 pa-0 d-flex" fluid>
         <!-- LEFT PANEL -->
         <v-container
             class="float-left grey darken-4 vertical-toolbar d-flex flex-column flex-center ma-0 pa-0"
@@ -9,24 +9,25 @@
             <imagebrowser @image_clicked="imageClicked"></imagebrowser>
 
             <v-btn
+                class="mx-4 my-4"
+                color="blue"
                 dense
                 outlined
-                color="blue"
-                class="mx-4 my-4"
                 @click="InitializeLUAGenerator"
-                >Download HUD Pack</v-btn
+            >Download HUD Pack
+            </v-btn
             >
         </v-container>
 
         <!-- MIDDLE CANVAS VIEW -->
         <editor
             ref="editor"
-            @transformupdated="propertyview.updateElementState"
             @layerupdated="layerview.update"
+            @transformupdated="propertyview.updateElementState"
         />
         <!-- RIGHT PANEL -->
-        <v-container style="width: 25em; max-height: 100vh" class="ma-0 pa-0 grey darken-4">
-            <properties ref="propertyview" />
+        <v-container class="ma-0 pa-0 grey darken-4" style="width: 25em; max-height: 100vh">
+            <properties ref="propertyview"/>
             <layerview ref="layerview"></layerview>
         </v-container>
 
@@ -35,14 +36,14 @@
                 <v-icon>mdi-alpha-x</v-icon>
             </v-btn>
             <v-row
+                class="image-overlay-browser-body"
                 rows="12"
                 style="background-color: black; overflow: auto"
-                class="image-overlay-browser-body"
             >
                 <v-cols cols="12">
                     <pre lang="language-lua">
                         <code>
-                            {{generatedCode}}
+                            {{ generatedCode }}
 
                         </code>
                     </pre>
@@ -74,7 +75,7 @@ export default {
         Imagebrowser,
     },
 
-    data() {
+    data () {
         return {
             // component refs
             editor: Object,
@@ -89,17 +90,18 @@ export default {
 
     computed: {},
 
-    mounted() {
+    mounted () {
         this.editor = this.$refs.editor
         this.layerview = this.$refs.layerview
         this.propertyview = this.$refs.propertyview
-        this.editor.setBackgroundImage("https://d1i6h0k565wt9n.cloudfront.net/images/backgrounds/bo3_thegiant_3.png");
+        this.editor.setBackgroundImage('https://d1i6h0k565wt9n.cloudfront.net/images/backgrounds/bo3_thegiant_3.png')
     },
 
-    created() {},
+    created () {
+    },
 
     methods: {
-        async InitializeLUAGenerator(evt) {
+        async InitializeLUAGenerator (evt) {
             evt.preventDefault()
             let stage = {}
             this.layer
@@ -129,12 +131,16 @@ export default {
                 })
         },
 
-        imageClicked(evt) {
-            if (evt.includes('background')) this.editor.setBackgroundImage(evt)
-            else this.editor.addImage(evt)
+        imageClicked (evt) {
+            if (evt.includes('background')) {
+                this.editor.setBackgroundImage(evt)
+            } else {
+                this.editor.addImage(evt)
+            }
         },
 
-        updatePropertiesPanel(elementState) {},
+        updatePropertiesPanel (elementState) {
+        },
     },
 }
 </script>
@@ -147,6 +153,7 @@ export default {
     padding: 0;
     background: #555;
 }
+
 .vertical-toolbar {
     height: 100vh !important;
     width: 30em;

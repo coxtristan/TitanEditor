@@ -15,16 +15,28 @@ export default {
         ],
         link: [
             { rel: 'icon', type: 'image/x-icon', href: '/lunaranomaly.png' }
-        ]
+        ],
     },
+
+    router: {
+        linkActiveClass: 'active-link',
+        linkExactActiveClass: 'active-link'
+    },
+
 
     // Global CSS (https://go.nuxtjs.dev/config-css)
     css: [
     ],
 
+    styleResources: {
+        scss: [
+            '~/assets/scss/variables.scss'
+        ],
+    },
+
     // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
     plugins: [
-       
+
     ],
 
     // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -42,7 +54,7 @@ export default {
         '@nuxtjs/axios',
         // https://go.nuxtjs.dev/content
         '@nuxt/content',
-        
+
     ],
 
     // Axios module configuration (https://go.nuxtjs.dev/config-axios)

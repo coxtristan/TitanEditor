@@ -1,26 +1,15 @@
 <template>
     <v-app dark>
-        <v-app-bar app fluid dense flex class="ma-auto pa-auto">
-            <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
-            
+        <v-app-bar app class="ma-auto pa-auto" dense flex fluid v-if="!isScrollingPortfolio">
             <v-container fluid text>
-                <v-row justify="end">
-                    
-                <v-btn class="ma-2" color="blue" dense text to="/">home</v-btn>
-                <v-btn class="ma-2" text dense to="/designer">anomaly</v-btn>
-                <v-btn class="ma-2" text dense to="/about">about</v-btn>
-
-                </v-row>
-                <!-- <v-btn text dense to="/gsc">gsc explorer</v-btn> -->
-                <!-- <v-btn text dense to="/lua">lua explorer</v-btn> -->
-                <!-- <v-btn text dense to="/signup">signup</v-btn> -->
-                <!-- <v-btn color="green" text dense to="/login">login</v-btn> -->
+                <v-btn class="ma-2" color="blue" dense text to="/">Portfolio</v-btn>
+                <v-btn class="ma-2" dense text to="/designer">anomaly</v-btn>
             </v-container>
         </v-app-bar>
 
         <v-main>
-            <v-container fluid class="ma-0 pa-0" style="height: 100vh - 4em">
-                <nuxt />
+            <v-container class="ma-0 pa-0" fluid >
+                <nuxt/>
             </v-container>
         </v-main>
     </v-app>
@@ -28,13 +17,25 @@
 
 <script>
 export default {
-    data() {
+    data () {
         return {}
     },
+    computed: {
+        isScrollingPortfolio() {
+            return this.$store.state.scrollingPortfolio
+        }
+    }
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="scss">
+::-webkit-scrollbar {
+    max-width: 0px;
+}
+
+body {
+    height: 100%;
+}
 
 </style>
 

@@ -78,6 +78,12 @@
                             target="_blank"
                             >View Source on Github</a
                         ><v-icon>mdi-open-in-new</v-icon>
+                        <v-btn v-if="project.tryit" :to="project.tryit.goto"
+                            >{{ project.tryit.buttonTitle }}
+                            <v-icon v-if="project.tryit.buttonIcon">{{
+                                project.tryit.buttonIcon
+                            }}</v-icon></v-btn
+                        >
                         <v-container v-if="project.tech" class="ma-0 pa-5">
                             <v-row align="start" class="py-4">
                                 <h3>Technology, Languages or Tools Used</h3>
@@ -110,12 +116,7 @@
                             </v-row>
                             <v-row>
                                 <v-card-text
-                                    style="
-                                        
-                                        text-align: left;
-                                        
-                                        overflow: auto;
-                                    "
+                                    style="text-align: left; max-width: 75%"
                                     class="mx-auto px-auto"
                                 >
                                     {{ project.description }}
@@ -155,16 +156,16 @@ export default {
                     color: 'grey darken-4',
                     title: 'DirectX GUI Overlay and Game Utilities',
                     github: 'https://github.com/coxtristan/COD7-Tools',
-                    description: `This project was a way for myself to learn about the inner-workings of 3D graphics engines. 
+                    description: `This project was a way for myself to learn about the inner-workings of 3D graphics engines.
                     I've learned that taking something apart so that you can understand it well enough to extend its capabilities is the way I learn best.
-                    One of the most interesting things I found while implementing the DirectX9 hook required to draw the ImGui menu was how COM Objects, such as IDirect3D9Device, do not share VTables. 
+                    One of the most interesting things I found while implementing the DirectX9 hook required to draw the ImGui menu was how COM Objects, such as IDirect3D9Device, do not share VTables.
                     A VTable (short for "Virtual Method Table) is simply an array of function pointers and is one of the primary mechanisms for polymorphism in C++.
                     This fact came up when deciding the technique I would use to "capture" the game engines IDirect3D9Device pointer, which is used for issuing draw calls and managing D3D state.
                     My initial approach was to create a "dummy" D3D Device of my own, and overwrite its vtable with one that I crafted to allow my injected code to run.
-                    This failed, because COM Objects do not share vtable pointers. In reality, they each store a pointer to a copy of the vtable. However, each entry in the vtable pointed to the same function, 
-                    meaning both the game and my fake D3D instance were calling the same functions, located in the same place in memory. 
-                    Once having figured that out through the use of a debugger (I prefer x86dbg), my next approach would be more successful. 
-                    I now used the fake D3D Device that I created to learn the location of certain functions that would be used by both instances. I now copied the vtable from the fake device, and installed a "capture hook" which would essentially redirect code execution from the original virtual function to my own code, which would save the "this" pointer, set a flag that the device was captured, 
+                    This failed, because COM Objects do not share vtable pointers. In reality, they each store a pointer to a copy of the vtable. However, each entry in the vtable pointed to the same function,
+                    meaning both the game and my fake D3D instance were calling the same functions, located in the same place in memory.
+                    Once having figured that out through the use of a debugger (I prefer x86dbg), my next approach would be more successful.
+                    I now used the fake D3D Device that I created to learn the location of certain functions that would be used by both instances. I now copied the vtable from the fake device, and installed a "capture hook" which would essentially redirect code execution from the original virtual function to my own code, which would save the "this" pointer, set a flag that the device was captured,
                     and uninstall the hook before the next frame was pushed to the screen.
                     `,
                     tech: [
@@ -173,13 +174,11 @@ export default {
                             icon: 'mdi-language-cpp',
                         },
                         {
-                            name:
-                                'x64dbg',
+                            name: 'x64dbg',
                             icon: 'mdi-spider',
                         },
                         {
-                            name:
-                                'Capstone Disassembly Engine',
+                            name: 'Capstone Disassembly Engine',
                             icon: 'mdi-hexadecimal',
                         },
                     ],
@@ -190,22 +189,26 @@ export default {
                 {
                     color: 'grey darken-3',
                     title: 'Anomaly - Web-based GUI Design Tool',
+                    tryit: {
+                        buttonTitle: 'Try Anomaly',
+                        buttonIcon: 'mdi-open-in-new',
+                        goto: '/designer',
+                    },
                     github: 'https://github.com/coxtristan/TitanEditor',
                     description: `
-                    Anomaly is a web-based tool that allows easy manipulation of images and text, and then converts the canvas scene to LUA code. 
-                    One of the biggest issues in modding games is the lack of proper tools. 
-                    This makes implementing interesting ideas far more difficult than it should be. For instance, when trying to position an image properly for an in-game user interface, 
+                    Anomaly is a web-based tool that allows easy manipulation of images and text, and then converts the canvas scene to LUA code.
+                    One of the biggest issues in modding games is the lack of proper tools.
+                    This makes implementing interesting ideas far more difficult than it should be. For instance, when trying to position an image properly for an in-game user interface,
                     pixel-perfect positioning entails making a guess at the correct coordinate values, waiting about 5 minutes for the game to load,
-                     making a slight adjustment to the position of the image, and then repeating the previous steps  until its "close enough". 
-                    This process can easily waste 30 minutes just trying to get an image in the right spot! 
-                    "Anomaly" is a tool I developed to help solve this issue by providing content developers a more efficient way to create their ideas. Getting pixel-perfect positioning for on-screen elements 
+                     making a slight adjustment to the position of the image, and then repeating the previous steps  until its "close enough".
+                    This process can easily waste 30 minutes just trying to get an image in the right spot!
+                    "Anomaly" is a tool I developed to help solve this issue by providing content developers a more efficient way to create their ideas. Getting pixel-perfect positioning for on-screen elements
                     is now possible in about 10 minutes *total*, from opening the website, to selecting the images you want to use, to downloading the generated code and installing it in the game.
                     This tool also reduces the barrier to entry for custom content creation by allowing people who don't know how to code use a simple tool that will code just about everything for them. `,
                     heroShot: require('@/screenshots/anomalyss1.png'),
                     tech: [
                         {
-                            name:
-                                'Amazon AWS',
+                            name: 'Amazon AWS',
                             icon: 'mdi-aws',
                         },
                         {
@@ -213,13 +216,11 @@ export default {
                             icon: 'mdi-brush',
                         },
                         {
-                            name:
-                                'Lua',
+                            name: 'Lua',
                             icon: 'mdi-language-lua',
                         },
                         {
-                            name:
-                                'NodeJS',
+                            name: 'NodeJS',
                             icon: 'mdi-nodejs',
                         },
                         {
@@ -237,13 +238,15 @@ export default {
                 {
                     color: 'grey darken-1',
                     title: 'Commission Tracker',
-                    tech: [{ name: 'Nativescript-Vue', icon: 'mdi-nativescript'}],
-                    description: `This commission tracker app is written using Nativescript-Vue for android`,
+                    github: 'https://github.com/coxtristan/CommsApp',
+                    tech: [
+                        { name: 'Nativescript-Vue', icon: 'mdi-nativescript' },
+                    ],
+                    description: `This commission tracker app is written using Nativescript-Vue for android. Freelance artists need to keep track of commission requirements, their clients' contact information, agreed-upon pricing, and completion status. This app allows freelance artists to efficiently store that crucial information. `,
                     heroShot: require('@/screenshots/phoness1.png'),
                     id: 2,
                 },
             ],
-
         }
     },
 
@@ -253,6 +256,7 @@ export default {
     },
 
     mounted() {
+
         window.particlesJS('particles-js', {
             particles: {
                 number: {
@@ -375,14 +379,6 @@ $text: #fff;
 
 $background: #000000;
 
-body,
-html {
-    overflow: hidden; /* Hide scrollbars */
-}
-
-html::-webkit-scrollbar {
-    display: none;
-}
 
 canvas {
     display: block;

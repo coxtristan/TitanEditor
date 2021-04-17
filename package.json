@@ -3,29 +3,34 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
     "build": "nuxt build",
-    "start": "nuxt start",
-    "generate": "nuxt generate"
+    "lint": "eslint --ext .ts,.js,.vue .",
+    "dev": "nuxt",
+    "generate": "nuxt generate",
+    "start": "nuxt start"
   },
   "dependencies": {
     "@nuxt/content": "^1.9.0",
     "@nuxtjs/axios": "^5.12.2",
     "aws-sdk": "^2.831.0",
     "core-js": "^3.6.5",
+    "emailjs-com": "^2.6.4",
     "fabric": "^4.3.0",
     "konva": "^7.2.2",
+    "lodash": "^4.17.21",
     "nuxt": "^2.14.6",
     "particles.js": "^2.0.0",
     "prism-themes": "^1.5.0",
     "remark-gemoji": "^6.0.0",
+    "swiper": "^6.5.4",
     "uuid": "^8.3.2",
+    "vue-awesome-swiper": "^4.1.1",
+    "vue-cli": "^2.9.6",
     "vue-konva": "^2.1.6"
   },
   "devDependencies": {
-    "@nuxtjs/vuetify": "^1.11.2",
-    "eslint-config-prettier": "^6.12.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "prettier": "^2.1.2"
+    "@nuxtjs/eslint-config": "^6.0.0",
+    "@nuxtjs/vuetify": "^1.11.3",
+    "eslint": "^7.23.0"
   }
 }
