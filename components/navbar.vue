@@ -52,7 +52,7 @@ a {
 .navbar {
     width: 100%;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     align-content: flex-end;
     padding-right: 5%;
     padding-top: 1rem;
