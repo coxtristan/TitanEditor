@@ -8,7 +8,7 @@
                         Fullstack Developer
                     </h2>
                     <div class="hero-link-container">
-                        <a class="external-link" href="https://github.com" target="_blank">
+                        <a class="external-link" :href="contactInfo.github" target="_blank">
                             <VIcon class="pa-0 ma-0 link-icon">mdi-github</VIcon>
                             <span style="text-align: left; margin-left: 0px">github</span>
                         </a>
