@@ -3,7 +3,7 @@
         <div class="navbar">
             <div :class="{'nav-links': true, 'nav-active': showMobileNav}">
                 <NuxtLink class="link" to="/">/portfolio</NuxtLink>
-                <NuxtLink class="link" to="/resume">/resume</NuxtLink>
+                <a class="link" href="https://tristanshostedfiles.s3.amazonaws.com/TristanCoxResume.pdf" target="_blank" download="TristanCoxResume">/resume</a>
                 <NuxtLink class="link" to="/contact">/contact</NuxtLink>
                 <NuxtLink class="link" to="/designer">/anomaly</NuxtLink>
             </div>

@@ -12,7 +12,7 @@
                             <VIcon class="pa-0 ma-0 link-icon">mdi-github</VIcon>
                             <span style="text-align: left; margin-left: 0px">github</span>
                         </a>
-                        <a class="external-link" href="https://github.com" target="_blank">
+                        <a class="external-link" href="https://tristanshostedfiles.s3.amazonaws.com/TristanCoxResume.pdf" download="" target="_blank">
                             <VIcon class="pa-0 ma-0 link-icon">mdi-download</VIcon>
                             resume
                         </a>
@@ -26,14 +26,14 @@
                 <h1 class="pf-item-header">{{ project.title }}</h1>
 
                 <p class="pf-item-desc ">{{ project.description }}</p>
-                <p class="pf-item-tech ">Tech: Vue.js, Node.js, and AWS</p>
+                <p class="pf-item-tech ">{{ project.tech.map(x => x.name).join(', ')}}</p>
                 <div class="pf-link-container">
                     <a :href="project.github" class="pf-item-git">View Code</a>
                     <a v-if="project.projectLink" :href="project.projectLink" class="pf-item-git">Try it (Desktop PC
                         only)</a>
                 </div>
             </header>
-            <img :src="require('@/screenshots/overlayss1.png')" class="pf-item-img elevation-4"/>
+            <img :src="project.screenshot" class="pf-item-img elevation-4"/>
         </section>
         <section class="pf-contact-container mx-auto pb-4">
             <header>
@@ -73,7 +73,7 @@ export default {
 
             projects: [
                 {
-                    title: 'Universal game developer/analyst overlay',
+                    title: 'Game Overlay',
                     github: 'https://github.com/coxtristan/COD7-Tools',
 
                     description: 'High performance graphics overlay made by developers, for developers.',
@@ -180,6 +180,7 @@ export default {
     align-items: center;
     width: 90%;
     height: 100vh;
+    max-height: 100vh;
 }
 
 .pf-item-header {
@@ -196,7 +197,7 @@ export default {
 
 .pf-link-container {
     display: flex;
-    justify-content: space-between;
+    max-height: 100vh;
 }
 
 
@@ -227,15 +228,17 @@ export default {
     font-family: "JetBrains Mono", monospace;
     color: $highlight;
     text-align: left;
-    margin: 1rem 0 0 0;
+    margin: 1rem 1rem 0 0;
     padding: 0;
     font-size: 1vw;
 }
 
 .pf-item-img {
-    width: 45%;
+    width: auto;
     height: auto;
     margin-left: 5%;
+    max-height: 90vh;
+    max-width: 50%;
 }
 
 
@@ -317,11 +320,16 @@ export default {
     justify-content: space-between;
     width: 90%;
     height: 80vh;
+    padding-top: 5%;
 }
 
 @media only screen and (max-width: 768px) {
     .pf-item-container {
         flex-direction: column;
+    }
+
+    .pf-item-img{
+        max-width: 100%;
     }
 
     .pf-contact-container{
