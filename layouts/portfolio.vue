@@ -39,7 +39,7 @@ export default {
 }
 
 body {
-    height: 100%;
+    height: 100vh;
 }
 //
 //body {
