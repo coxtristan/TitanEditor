@@ -1,9 +1,11 @@
 <template>
-    <v-container class="ma-0 pa-0 d-flex" fluid>
+
+    <VContainer class="ma-0 pa-0 d-flex" fluid>
         <!-- LEFT PANEL -->
         <v-container
             class="float-left grey darken-4 vertical-toolbar d-flex flex-column flex-center ma-0 pa-0"
         >
+            <p>{{projectId}}</p>
             <toolkit @add_text="editor.addText"></toolkit>
 
             <imagebrowser @image_clicked="imageClicked"></imagebrowser>
@@ -50,7 +52,7 @@
                 </v-cols>
             </v-row>
         </v-overlay>
-    </v-container>
+    </VContainer>
 </template>
 
 <script>
@@ -66,6 +68,7 @@ import Toolkit from '../components/toolkit.vue'
 import Imagebrowser from '../components/imagebrowser.vue'
 
 export default {
+    layout: 'anomaly',
     components: {
         ContextMenu,
         Properties,
@@ -75,7 +78,7 @@ export default {
         Imagebrowser,
     },
 
-    data () {
+    data() {
         return {
             // component refs
             editor: Object,
@@ -85,23 +88,29 @@ export default {
             // overlay state
             codePreviewEnabled: false,
             generatedCode: '',
+            projectId: ''
         }
     },
 
     computed: {},
 
-    mounted () {
+    mounted() {
         this.editor = this.$refs.editor
         this.layerview = this.$refs.layerview
         this.propertyview = this.$refs.propertyview
         this.editor.setBackgroundImage('https://d1i6h0k565wt9n.cloudfront.net/images/backgrounds/bo3_thegiant_3.png')
+        if(this.$store.state.currentProjectId != '') {
+            // console.log(getProjectData)
+            this.projectId = ` Current ProjectId: ${this.$store.state.currentProjectId}`
+
+        }
     },
 
-    created () {
+    created() {
     },
 
     methods: {
-        async InitializeLUAGenerator (evt) {
+        async InitializeLUAGenerator(evt) {
             evt.preventDefault()
             let stage = {}
             this.layer
@@ -123,7 +132,7 @@ export default {
                 })
             console.log(stage)
             this.$axios
-                .$post('http://localhost:3001/download/', { stage })
+                .$post('http://localhost:3001/download/', {stage})
                 .then((response) => {
                     console.log(response.generatedCode)
                     this.generatedCode = response.generatedCode
@@ -131,7 +140,7 @@ export default {
                 })
         },
 
-        imageClicked (evt) {
+        imageClicked(evt) {
             if (evt.includes('background')) {
                 this.editor.setBackgroundImage(evt)
             } else {
@@ -139,7 +148,7 @@ export default {
             }
         },
 
-        updatePropertiesPanel (elementState) {
+        updatePropertiesPanel(elementState) {
         },
     },
 }

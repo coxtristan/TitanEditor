@@ -4,7 +4,7 @@
             <VContainer class="ma-0 pa-0 main" fluid>
                 <Navbar/>
                 <Nuxt/>
-                <footer class="blue black--text text-center">Copyright 2020 Tristan Cox
+                <footer class="blue black--text text-center">Copyright 2021 Tristan Cox
                 </footer>
             </VContainer>
         </VMain>
@@ -35,7 +35,7 @@ export default {
 }
 
 ::-webkit-scrollbar {
-    max-width: 0px;
+    max-width: 0;
 }
 
 body {
